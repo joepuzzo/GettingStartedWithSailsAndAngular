@@ -458,10 +458,10 @@ module.exports = function(grunt) {
 
 ```
 
-This task simply takes your bower components and adds them to an assets/vendor directory at runtime.  In order for this to work, we also need to install the `grunt-bower-task` that this file refers to. Do this by npm installing it as a dev-dependency. 
+This task simply takes your bower components and adds them to an assets/vendor directory at runtime.  In order for this to work, we also need to install the `grunt-bower-task` that this file refers to. Do this by npm installing it as a dependency. 
 
 ```bash
-$ npm install grunt-bower-task --save-dev
+$ npm install grunt-bower-task --save
 ```
 
 If you want more info on this task and what those options do, refer to the following github repo https://github.com/yatskevich/grunt-bower-task. 

@@ -466,6 +466,22 @@ $ npm install grunt-bower-task --save
 
 If you want more info on this task and what those options do, refer to the following github repo https://github.com/yatskevich/grunt-bower-task. 
 
+Now to make sure this bower task gets run, open up `tasks/register/compileAssets.js` and insert `bower:install` in the array. Your file should look something like this: 
+
+```javascript
+module.exports = function (grunt) {
+	grunt.registerTask('compileAssets', [
+		'bower:install', //<< This is the new line 
+		'clean:dev',
+		'jst:dev',
+		'less:dev',
+		'copy:dev',
+		'coffee:dev'
+	]);
+};
+
+```
+
 Lastly we need to point to the vendor directory. We have done this before so nothing here should be unfamiliar. 
 Note that we had to make sure angular got loaded before everything else in the vendor directory, so it is important that these lines are in order. Open the `tasks/pipeline.js` file and add the following: 
 

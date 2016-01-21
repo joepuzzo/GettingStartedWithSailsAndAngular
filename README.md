@@ -5,7 +5,8 @@
 So, you want to build an angular application, but need a backend to serve it up. You have looked into many solutions including Java Spring, Ruby on Rails, Nodes express, etc and now you have to make a decision. While you could go many directions here, you have some requirements.  
 
 You want:
-1. a full stack JS application.
+
+1.  a full stack JS application.
 2. a simple lightweight solution.
 3. minimal configuration.
 4. to play well with angular.
@@ -14,16 +15,17 @@ You want:
 7. a simple way to build your application. 
 8. to know what the heck is going on! 
 
-So lets look at some of our contenders. 
+So lets look at some of our contenders: 
+
 * Spring framework: its website claims to be "simple, portable, fast, and flexible", but it runs on Java and isn't as lightweight as some of its competitors. It also won't lead to a full stack JS application. 
 * Ruby on rails: "easy and fun" and follows the "convention over configuration" methodology, but still isn't a full JS stack.  
-* NodeJS with express is a widely-adopted backend web framework written in JS. This seems like just the thing, but it requires some initial configuration and does not come with a build system out of the box. 
+*  Express is a widely-adopted backend web framework written in on top of Node. This seems like just the thing, but it requires some initial configuration and does not come with a build system out of the box. 
 
 If we're interested in the NodeJS/Express approach, how can we simplify configuration and introduce a build system? One widely-used solution is the yeoman generator, which is "a generic scaffolding system allowing the creation any kind of app". Its a node module that you can install using npm and can use as a tool to setup an application. There are thousands of generators for various project types. All we have to do is select a generator and run `yo generator-name` to generate a base project. 
 
-Unfortunately, yeoman lacks standardized configuration. You could have a yeoman generator called  `angular-meanstack` and a generator called `meanstack-angular` that both create very similar applications but they are structured very differently, since all decisions were up to the author of the generator. Additionally, this approach has some drawbacks for newcomers; the wealth of generated files makes it difficult to sift through and understand how the application works. Making changes becomes an insurmountable task. 
+Unfortunately, yeoman lacks standardized configuration. You could have a yeoman generator called  `angular-meanstack` and a generator called `meanstack-angular` that both create very similar applications but they are structured very differently, since all decisions were up to the author of the generator. Additionally, this approach has some drawbacks for newcomers; the wealth of generated files makes it difficult to sift through and understand how the application works. If you are familiar with all the tools then this is not bad, but for others it can pose a challenge. In the end you are left with a "template" application that has a bunch of stuff setup for you, but unless you have used that generator before, you really don't know what you have. 
 
-So we (relative newcomers to this scene) are left with a dilemma. Yeoman seems like a holy grail because it satisfies nearly all of our requirements. 
+So are left with a dilemma. Yeoman seems like a holy grail because it satisfies nearly all of our requirements. 
 
 1. a full stack JS application. <font color='green'>✓</font> 
 2. a simple lightweight solution. <font color='green'>✓</font> 
@@ -42,13 +44,14 @@ Sails is a "convention over configuration" MVC (ModelViewController) backend fra
 
 While sails can be used to create custom APIs and microservices,  we are going to focus on using it as a backend for our angular application. Out of the box sails is setup as a server-rendered application (old fashioned approach). This means that all routing is done on the server side and the server (Sails) is responsible for "serving up" our views. So when a browser sends a GET request to http://yoururl/home this request is mapped to the sails routes that will map your request to a view and send it back to your browser.  If there are no routes defined, sails will then look into an assets folder for an index.html page and return that instead. Because we are using angular, where all routing is done internally within the browser (new approach), there is no need for the server rendered approach. Therefore, we will simply be using sails as a "static asset application". Thankfully, this is a built-in option.  
 
-Before setting up our first application, it is important to note that Sails is designed to be the NodeJS backend out of the box, but we'll also be using it for the frontend. I additionally recommend using it for all backend services. 
+One thing to note before we start setting up our first application, is that Sails is a great solution for all your backend micro services. It was designed to be the node backend, and has abstracted everything out in a beautiful way that allows you to easily get your services up and running right out of the box. So while we are going to use it to render our angular app, you should definitely also consider it for writing your services! 
 
 ## Setting Things Up  
 
 This process will require a little more configuration than a yeoman generator, but will leave you with a much better understanding of how your application operates. This tutorial assumes you have worked with node before and are familiar with the npm package manager. 
 
 In the following steps, we will
+
 1. install Sails
 2. use sails to generate our new application
 3. setup sails as a static asset application 
@@ -94,33 +97,33 @@ Open a browser and hit http://localhost:1337. You should see the default sails p
 
 As we previously discussed, Sails is by default a server-rendered application. We are going to turn it into a static asset application. Before we do, lets look at the current structure of our project. When you `ls`in the testProject directory, you will see the following structure
 ```bash
-Gruntfile.js	api		assets		node_modules	tasks
-README.md	app.js		config		package.json	views
+Gruntfile.js    api     assets      node_modules    tasks
+README.md   app.js      config      package.json    views
 ```
 We won't discuss the purpose of each of these files and directories in detail, but a basic understanding will be helpful. The descriptions below were taken strait from Sails website. For full descriptions, go to http://sailsjs.org/documentation/anatomy/my-app. 
 
 * api
-	* This folder contains the vast majority of your app's back-end logic. It is home to the 'M' and 'C' in MVC Framework. 
+    * This folder contains the vast majority of your app's back-end logic. It is home to the 'M' and 'C' in MVC Framework. 
 *  assets 
-	* This is your assets folder. It houses all of the static files that your app will need to host. Feel free to create your own files and folders in here. Upon lifting, a file called `myApp/assets/newFolder/data.txt` could be accessed at http://localhost:1337/newFolder/data.txt.
+    * This is your assets folder. It houses all of the static files that your app will need to host. Feel free to create your own files and folders in here. Upon lifting, a file called `myApp/assets/newFolder/data.txt` could be accessed at http://localhost:1337/newFolder/data.txt.
 * config
-	* This folder contains various files that will allow you to customize and configure your Sails app.
+    * This folder contains various files that will allow you to customize and configure your Sails app.
 * tasks
-	* Sails uses Grunt for asset management. This file contains configuration information for the GRUNT tasks that Sails for this purpose.
+    * Sails uses Grunt for asset management. This file contains configuration information for the GRUNT tasks that Sails for this purpose.
 * views 
-	* This is the directory that holds all of your custom views. To create a custom view, create a new directory inside of this then create a new .ejs or .html file. In order for it to be rendered by a client, you must either set up a route in myApp/config/routes.js or use the res.view() method inside of a custom controller action.
+    * This is the directory that holds all of your custom views. To create a custom view, create a new directory inside of this then create a new .ejs or .html file. In order for it to be rendered by a client, you must either set up a route in myApp/config/routes.js or use the res.view() method inside of a custom controller action.
 * package.json
-	* This is a standard configuration file for npm. Among other things, this file contains the name and version of all of the Node Modules that your app depends on to run.
+    * This is a standard configuration file for npm. Among other things, this file contains the name and version of all of the Node Modules that your app depends on to run.
 * README
-	* This is a generic README that you can edit to describe your app.
+    * This is a generic README that you can edit to describe your app.
 * .gitignore
-	* A default .gitignore file that has all commonly ignored files and directories
+    * A default .gitignore file that has all commonly ignored files and directories
 * .sailsrc
-	* This file is useful for setting configuration for ALL Sails apps on a computer. You can also use it to extend the functionality of the Sails CLI tool.
+    * This file is useful for setting configuration for ALL Sails apps on a computer. You can also use it to extend the functionality of the Sails CLI tool.
 * app.js
-	* This file exists only to tell Node how to start your app. It is used once and only when you lift your app from the command line. You should just ignore this file.
+    * This file exists only to tell Node how to start your app. It is used once and only when you lift your app from the command line. You should just ignore this file.
 * Gruntfile.js
-	* Sails uses Grunt for asset management. This file contains configuration information for the GRUNT tasks that Sails uses for this purpose.
+    * Sails uses Grunt for asset management. This file contains configuration information for the GRUNT tasks that Sails uses for this purpose.
 Sails' integration with Grunt is fully customizable but for most use cases, this file should remain unchanged. Instead, put your custom logic in `myApp/tasks/`
 
 Now that we are somewhat familiar with the application's structure, we can get it ready to use angular. Open up the `config/routes.js` with your favorite text editor. 
@@ -275,11 +278,11 @@ At this point your directory structure would look something like the following:
 
 ```bash
 -testProject
-	-assets
-		...
-		-app
-			app.js
-			routes.js
+    -assets
+        ...
+        -app
+            app.js
+            routes.js
 ```
 
 Now, what's an angular application without a view and controller? Let's make one. You can go ahead and do this by hand if you want, but I wrote a cool little sails generator that can do this for me, so I'm going to take advantage of that. First I will install it the same way I did the static generator: 
@@ -288,20 +291,18 @@ Now, what's an angular application without a view and controller? Let's make one
 $ npm install sails-generate-angular-controller --save-dev 
 ```
 
-Now I will use this custom generator to give me a home controller and view. It accepts two arguments, the name of the new controller and the destination directory name `assets/app/components/<direcoryname>` by default. 
+Now I will use this custom generator to give me a home controller and view. It accepts two arguments, the name of the new controller and the destination directory name `assets/app/components/<direcoryname>` by default. Run the following command from the project's root directory.
 
 ```bash
 $ sails generate angular-controller home home 
 ```
-Note that this command must be run from the project's root directory.
-
 If we run the `ls` command on the `assets/app/components/home` directory, you will see a new controller and a new view have been created! 
 ```
 $ ls assets/app/components/home
 home-controller.js home-view.html
 ```
 
-Finally we need to modify the `assets/index.html` file so its an Angular application. If you don't care to eep the helpful comments in the file, replace all contents with the code below. 
+Finally we need to modify the `assets/index.html` file so its an Angular application. If you don't care to keep the helpful comments in the file, replace all contents with the code below. 
 
 ```html
 <!DOCTYPE html>
@@ -314,7 +315,7 @@ Finally we need to modify the `assets/index.html` file so its an Angular applica
     <!--STYLES END-->
   </head>
   <body ng-app="testProject">
-	<div ng-view></div>
+    <div ng-view></div>
     <!--TEMPLATES-->
     <!--TEMPLATES END-->
     <!--SCRIPTS-->
@@ -381,19 +382,19 @@ If we look at `tasks/pipeline.js`, the stuff defined in the following sections:
 ```javascript
 // CSS files to inject in order
 var  cssFilesToInject = [ 
-	'styles/**/*.css'
+    'styles/**/*.css'
 ]
 ...
 // Client-side javascript files to inject in order
 var  jsFilesToInject = [ 
-	'js/dependencies/sails.io.js',
-	'js/dependencies/**/*.js',
-	'js/**/*.js'
+    'js/dependencies/sails.io.js',
+    'js/dependencies/**/*.js',
+    'js/**/*.js'
 ]
 
 // Client-side HTML templates to inject
 var  jsFilesToInject = [ 
-	'templates/**/*.html',
+    'templates/**/*.html',
 ]
 ```
 
@@ -415,44 +416,72 @@ As you can see, by default nothing in your app folder will be included, so lets 
 ```javascript
 // Client-side javascript files to inject in order
 var  jsFilesToInject = [ 
-	
+    
     // ...
-	
+    
     // Import all .js files from app ( app.js, routes.js, ... )
     'app/**/*.js'
 ]
 ```
 Again this is only necessary because the directory stucture of our app differs from the standard structure that sails was expecting (i.e., we placed all of our stuff into the `app` directory, rather than directories for `js`, `styles`, and `templates`). 
 
-Now there is only one more step to get everything up and running. We want to automatically inject our bower dependencies into our index page. Currently we need angular.js, angular-route.js, and ui-bootstrap.js. But they live somewhere in `bower_components`. We could just copy these from `bower_components` to `assets/js/dependencies` and they would get included, but then when we added new dependencies we would have to remember to copy them over as well, which is undesirable. So we are going to use yet another simple generator that will have our sails app automatically add bower_components to an `assets/vendor` directory. Install the generator as follows: 
-
-```bash
-$ npm install sails-generate-bower --save-dev
-```
-
-Now  run the generator with the following command:
-
-```bash
-$ sails generate bower
-```
-
-At the time of this writing there is an issue with this generator where it adds an old version of the grunt task to your `package.json`.
-
-To fix this, open `package.json`. Replace `"grunt-bower-task": "^0.3.4"` with `"grunt-bower-task": "^0.4.0"` 
-
-Save the change and run:
-
-```bash
-npm install
-```
-
-And lastly we have to make sure angular gets loaded before everything else in the vendor directory, so add the following to the `tasks/pipeline.js` file
+Now there is only one more step to get everything up and running. We want to automatically inject our bower dependencies into our index page. Currently we need angular.js, angular-route.js, and ui-bootstrap.js. But they live somewhere in `bower_components`. We could just copy these from `bower_components` to `assets/js/dependencies` and they would get included, but then when we added new dependencies we would have to remember to copy them over as well, which is undesirable. So we are going to add our first grunt task to our application! As previously discussed, grunt tasks are stored in the tasks directory. We are going to be adding a configuration task so lets add our new task in `tasks/config`. Create a new file in that directly called `bower.js` and insert the following code: 
 
 ```javascript
+/**
+ * Install bower components.
+ *
+ * ---------------------------------------------------------------
+ *
+ * Installs bower components and copies the required files into the assets folder structure.
+ *
+ */
+
+module.exports = function(grunt) {
+
+    grunt.config.set('bower', {
+        install: {
+            options: {
+                targetDir: './assets/vendor',
+                layout: 'byType',
+                install: true,
+                verbose: false,
+                cleanTargetDir: true,
+                cleanBowerDir: false,
+                bowerOptions: {}
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-bower-task');
+};
+
+```
+
+This task simply takes your bower components and adds them to an assets/vendor directory at runtime.  In order for this to work, we also need to install the `grunt-bower-task` that this file refers to. Do this by npm installing it as a dev-dependency. 
+
+```bash
+$ npm install grunt-bower-task --save-dev
+```
+
+If you want more info on this task and what those options do, refer to the following github repo https://github.com/yatskevich/grunt-bower-task. 
+
+Lastly we need to point to the vendor directory. We have done this before so nothing here should be unfamiliar. 
+Note that we had to make sure angular got loaded before everything else in the vendor directory, so it is important that these lines are in order. Open the `tasks/pipeline.js` file and add the following: 
+
+```javascript
+
+// CSS files to inject in order
+var  cssFilesToInject = [ 
+    'vendor/**/*.css',//<< load vendor css files
+    ...
+]
+...
 // Client-side javascript files to inject in order
 var  jsFilesToInject = [ 
-	'vendor/angular/angular.js', //<< new line, ABOVE 'vendor/**/*.js'
-	...
+    'vendor/angular/angular.js', //<< load angular first
+    'vendor/**/*.js'             //<< load other vendor js files 
+    ...
 ]
 ```
 
